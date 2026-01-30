@@ -1,0 +1,203 @@
+[
+  {
+    "id": "pomodoro-basics",
+    "title": "The Pomodoro Technique",
+    "category": "Time Management",
+    "summary": "A time management method that uses timed intervals to improve focus and productivity.",
+    "content": "The Pomodoro Technique is a time management method developed by Francesco Cirillo in the late 1980s. It uses a timer to break work into intervals, traditionally 25 minutes in length, separated by short breaks.",
+    "steps": [
+      "Choose a task you want to work on",
+      "Set a timer for 25 minutes (one 'pomodoro')",
+      "Work on the task until the timer rings",
+      "Take a short 5-minute break",
+      "Every 4 pomodoros, take a longer 15-30 minute break"
+    ],
+    "tips": [
+      "Keep a distraction list nearby to jot down interrupting thoughts",
+      "If interrupted, record what caused it and restart the pomodoro",
+      "Adjust the interval length to match your attention span"
+    ],
+    "tags": ["focus", "productivity", "time-management", "beginner"]
+  },
+  {
+    "id": "active-recall",
+    "title": "Active Recall",
+    "category": "Memory Techniques",
+    "summary": "Strengthen memory by actively stimulating recall rather than passive review.",
+    "content": "Active recall is a learning principle that involves actively stimulating memory during learning. Instead of passively reading or highlighting, you test yourself on the material.",
+    "steps": [
+      "Read or learn the material once",
+      "Close your notes and try to recall key points",
+      "Write down or speak aloud what you remember",
+      "Check your answers against the source material",
+      "Focus extra attention on items you couldn't recall"
+    ],
+    "tips": [
+      "Use flashcards to implement active recall",
+      "Test yourself before looking at answers",
+      "Space out your practice sessions over time"
+    ],
+    "tags": ["memory", "learning", "recall", "intermediate"]
+  },
+  {
+    "id": "spaced-repetition",
+    "title": "Spaced Repetition",
+    "category": "Memory Techniques",
+    "summary": "Review material at increasing intervals to move information into long-term memory.",
+    "content": "Spaced repetition is a learning technique that incorporates increasing intervals of time between reviews of previously learned material. This method exploits the psychological spacing effect.",
+    "steps": [
+      "Learn new material initially",
+      "Review after 1 day",
+      "Review again after 3 days",
+      "Review after 1 week",
+      "Review after 2 weeks, then monthly"
+    ],
+    "tips": [
+      "Use apps like Anki that implement spaced repetition algorithms",
+      "Be consistent with your review schedule",
+      "Combine with active recall for maximum effectiveness"
+    ],
+    "tags": ["memory", "long-term", "retention", "intermediate"]
+  },
+  {
+    "id": "feynman-technique",
+    "title": "The Feynman Technique",
+    "category": "Understanding",
+    "summary": "Learn anything deeply by teaching it in simple terms.",
+    "content": "Named after physicist Richard Feynman, this technique involves explaining a concept in simple language as if teaching it to someone with no background knowledge. If you can't explain it simply, you don't understand it well enough.",
+    "steps": [
+      "Choose a concept to learn",
+      "Explain it in simple terms as if teaching a child",
+      "Identify gaps in your explanation",
+      "Go back to the source material to fill gaps",
+      "Simplify your explanation further using analogies"
+    ],
+    "tips": [
+      "Use analogies and simple examples",
+      "Avoid jargon - use everyday language",
+      "Actually teach someone else if possible"
+    ],
+    "tags": ["understanding", "teaching", "deep-learning", "advanced"]
+  },
+  {
+    "id": "mind-mapping",
+    "title": "Mind Mapping",
+    "category": "Organization",
+    "summary": "Visualize relationships between concepts using diagrams.",
+    "content": "Mind mapping is a visual thinking tool that helps structure information, making it easier to analyze, comprehend, synthesize, and recall. Start with a central idea and branch out with related concepts.",
+    "steps": [
+      "Start with the main topic in the center",
+      "Draw branches for major subtopics",
+      "Add smaller branches for related details",
+      "Use colors and images to enhance memory",
+      "Connect related branches with lines"
+    ],
+    "tips": [
+      "Use colors to categorize information",
+      "Include images and symbols where possible",
+      "Keep branches to single keywords when possible"
+    ],
+    "tags": ["visual", "organization", "creativity", "beginner"]
+  },
+  {
+    "id": "chunking",
+    "title": "Chunking Information",
+    "category": "Memory Techniques",
+    "summary": "Break large amounts of information into smaller, manageable groups.",
+    "content": "Chunking is a strategy for making more efficient use of short-term memory by grouping information. By combining individual pieces of information into larger, meaningful units, you can remember more.",
+    "steps": [
+      "Identify the information you need to learn",
+      "Look for patterns or categories",
+      "Group related items together",
+      "Create meaningful connections between chunks",
+      "Practice recalling chunks as units"
+    ],
+    "tips": [
+      "Phone numbers use chunking (555-123-4567)",
+      "Create acronyms from first letters",
+      "Find patterns in seemingly random information"
+    ],
+    "tags": ["memory", "organization", "beginner"]
+  },
+  {
+    "id": "study-environment",
+    "title": "Optimizing Your Study Environment",
+    "category": "Environment",
+    "summary": "Create an environment that promotes focus and minimizes distractions.",
+    "content": "Your physical study environment significantly impacts your ability to focus and retain information. A well-organized, distraction-free space can dramatically improve your study sessions.",
+    "steps": [
+      "Choose a dedicated study space",
+      "Ensure good lighting (natural if possible)",
+      "Minimize noise or use consistent background sound",
+      "Keep your phone out of sight",
+      "Have all necessary materials within reach"
+    ],
+    "tips": [
+      "Consider noise-canceling headphones",
+      "Keep your study area clean and organized",
+      "Use website blockers during study time",
+      "Experiment to find what works for you"
+    ],
+    "tags": ["environment", "focus", "productivity", "beginner"]
+  },
+  {
+    "id": "interleaving",
+    "title": "Interleaved Practice",
+    "category": "Study Strategies",
+    "summary": "Mix different topics or problem types during practice sessions.",
+    "content": "Interleaving involves mixing different topics, subjects, or types of problems during a single study session, rather than focusing on one topic at a time (blocked practice).",
+    "steps": [
+      "Identify 2-4 related topics to study",
+      "Alternate between topics during your session",
+      "Don't switch too frequently (10-15 min minimum)",
+      "Include practice problems from multiple topics",
+      "Review connections between topics"
+    ],
+    "tips": [
+      "This feels harder initially but improves long-term retention",
+      "Particularly effective for math and sciences",
+      "Helps you recognize which approach to use for different problems"
+    ],
+    "tags": ["practice", "learning", "advanced"]
+  },
+  {
+    "id": "sleep-learning",
+    "title": "Sleep and Learning",
+    "category": "Health",
+    "summary": "Understand how sleep impacts memory consolidation and learning.",
+    "content": "Sleep plays a crucial role in memory consolidation. During sleep, your brain processes and consolidates information learned during the day, transferring it to long-term memory.",
+    "steps": [
+      "Aim for 7-9 hours of sleep per night",
+      "Maintain a consistent sleep schedule",
+      "Avoid screens 1 hour before bed",
+      "Review important material before sleeping",
+      "Don't cram - spread learning over multiple days"
+    ],
+    "tips": [
+      "Naps can help consolidate learning (20-30 min ideal)",
+      "Sleep-deprived learning is significantly less effective",
+      "Morning review after sleep reinforces memory"
+    ],
+    "tags": ["health", "memory", "sleep", "beginner"]
+  },
+  {
+    "id": "note-taking-cornell",
+    "title": "Cornell Note-Taking System",
+    "category": "Note-Taking",
+    "summary": "A systematic format for organizing and reviewing notes effectively.",
+    "content": "The Cornell Note-Taking System divides your page into sections for notes, cues, and summary, making review more efficient and promoting active recall.",
+    "steps": [
+      "Divide your page into 3 sections: cues (left), notes (right), summary (bottom)",
+      "During class, take notes in the main section",
+      "After class, add key terms/questions in the cue column",
+      "Write a brief summary at the bottom",
+      "Review by covering notes and using cues to recall"
+    ],
+    "tips": [
+      "Leave space between notes for later additions",
+      "Use abbreviations to keep up during lectures",
+      "Review notes within 24 hours for best retention"
+    ],
+    "tags": ["notes", "organization", "review", "intermediate"]
+  }
+]
