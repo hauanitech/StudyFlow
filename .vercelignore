@@ -1,0 +1,8 @@
+backend
+node_modules
+.env
+.env.local
+specs
+.specify
+.git
+*.log

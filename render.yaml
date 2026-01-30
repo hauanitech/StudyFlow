@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: studyflow-backend
+    runtime: node
+    region: frankfurt  # Change to your preferred region
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/advice
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: CORS_ORIGIN
+        sync: false  # Set manually in Render dashboard
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+        sync: false
+      - key: MONGODB_URI
+        sync: false  # Set manually after creating MongoDB Atlas
