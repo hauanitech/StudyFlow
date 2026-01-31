@@ -17,9 +17,9 @@ function generateCsrfToken() {
  * Sets CSRF token on GET requests, validates on state-changing requests
  */
 export function csrfProtection(req, res, next) {
-  // Skip CSRF for auth routes in development (cross-origin cookie issues)
+  // Skip CSRF for auth routes (cross-origin cookie issues with Vercel/Render)
   const isAuthRoute = req.path.startsWith('/auth/');
-  if (isAuthRoute && !env.isProd) {
+  if (isAuthRoute) {
     return next();
   }
 
