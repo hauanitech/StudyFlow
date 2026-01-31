@@ -31,8 +31,8 @@ export function csrfProtection(req, res, next) {
       token = generateCsrfToken();
       res.cookie(CSRF_COOKIE_NAME, token, {
         httpOnly: false, // Must be readable by JS
-        secure: env.isProd,
-        sameSite: 'lax', // Allow cross-origin GET requests to set cookie
+        secure: true, // Always secure for SameSite=None
+        sameSite: env.isProd ? 'none' : 'lax', // 'none' for cross-origin in production
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
       });
     }
