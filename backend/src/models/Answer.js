@@ -48,7 +48,7 @@ answerSchema.statics.getAnswersForQuestion = async function (
   questionId,
   options = {}
 ) {
-  const { sortBy = 'votes' } = options;
+  const { sortBy = 'votes', page, limit = 50 } = options;
 
   let sort;
   switch (sortBy) {
@@ -64,7 +64,34 @@ answerSchema.statics.getAnswersForQuestion = async function (
       sort = { isAccepted: -1, voteScore: -1, createdAt: -1 };
   }
 
-  return this.find({ question: questionId, status: 'active' })
+  const query = { question: questionId, status: 'active' };
+  
+  // If pagination requested
+  if (page && limit) {
+    const skip = (page - 1) * limit;
+    const [answers, total] = await Promise.all([
+      this.find(query)
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .populate('author', 'username')
+        .lean(),
+      this.countDocuments(query),
+    ]);
+    
+    return {
+      answers,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    };
+  }
+  
+  // No pagination
+  return this.find(query)
     .sort(sort)
     .populate('author', 'username')
     .lean();

@@ -163,19 +163,28 @@ export async function createAnswer(questionId, userId, body) {
 }
 
 export async function getAnswersForQuestion(questionId, options = {}, userId = null) {
-  const answers = await Answer.getAnswersForQuestion(questionId, options);
+  const result = await Answer.getAnswersForQuestion(questionId, options);
+  
+  // Handle both paginated and non-paginated responses
+  const answers = result.answers || result;
+  const hasPagination = !!result.answers;
 
   // Get user's votes for these answers
   if (userId && answers.length > 0) {
     const answerIds = answers.map((a) => a._id);
     const voteMap = await Vote.getUserVotesForTargets(userId, 'answer', answerIds);
-    return answers.map((a) => ({
+    const answersWithVotes = answers.map((a) => ({
       ...a,
       userVote: voteMap[a._id.toString()] || 0,
     }));
+    
+    if (hasPagination) {
+      return { ...result, answers: answersWithVotes };
+    }
+    return answersWithVotes;
   }
 
-  return answers;
+  return hasPagination ? result : answers;
 }
 
 export async function updateAnswer(answerId, userId, body) {

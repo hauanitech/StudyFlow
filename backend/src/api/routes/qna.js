@@ -227,13 +227,17 @@ router.post(
 // Get answers for a question
 router.get('/questions/:questionId/answers', optionalAuth, async (req, res) => {
   try {
-    const { sortBy } = req.query;
-    const answers = await qnaService.getAnswersForQuestion(
+    const { sortBy, page, limit } = req.query;
+    const result = await qnaService.getAnswersForQuestion(
       req.params.questionId,
-      { sortBy },
+      { 
+        sortBy,
+        page: page ? parseInt(page) : 1,
+        limit: limit ? Math.min(parseInt(limit), 100) : 50,
+      },
       req.user?.id
     );
-    res.json({ data: answers });
+    res.json(result);
   } catch (error) {
     console.error('Error getting answers:', error);
     res.status(500).json({ error: 'Failed to get answers' });
