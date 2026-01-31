@@ -188,23 +188,13 @@ export const apiRateLimit = rateLimit({
   message: 'Too many requests. Please try again.',
 });
 
-/**
- * Rate limiter for reporting content
- * 5 reports per hour
- */
-export const reportRateLimit = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
-  message: 'Too many reports submitted. Please try again later.',
-  keyGenerator: (req) => `report:${req.user?.id || req.ip}`,
-});
-
 export default {
   rateLimit,
   authRateLimit,
   signupRateLimit,
   passwordResetRateLimit,
   postingRateLimit,
+  reportRateLimit,
   votingRateLimit,
   searchRateLimit,
   apiRateLimit,
