@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { requireAuth } from '../../middleware/requireAuth.js';
 import { validate } from '../../middleware/validate.js';
+import { reportRateLimit } from '../../middleware/rateLimit.js';
 import * as moderationService from '../../services/moderationService.js';
 
 const router = Router();
@@ -46,7 +47,7 @@ const dismissReportSchema = z.object({
 // ============ User Routes ============
 
 // Create a report
-router.post('/', requireAuth, validate(createReportSchema), async (req, res) => {
+router.post('/', requireAuth, reportRateLimit, validate(createReportSchema), async (req, res) => {
   try {
     const report = await moderationService.createReport(req.user.id, req.body);
     res.status(201).json({ data: report });
@@ -56,6 +57,9 @@ router.post('/', requireAuth, validate(createReportSchema), async (req, res) => 
     }
     if (error.message === 'You have already reported this content') {
       return res.status(400).json({ error: error.message });
+    }
+    if (error.message.includes('too many reports')) {
+      return res.status(429).json({ error: error.message });
     }
     console.error('Error creating report:', error);
     res.status(500).json({ error: 'Failed to create report' });

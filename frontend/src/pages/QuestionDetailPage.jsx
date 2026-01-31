@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../state/authStore';
 import { qnaApi } from '../services/qnaApi';
-import { AnswerList, AnswerForm, ReportModal } from '../components/qna';
-
+import { AnswerList, AnswerForm, ReportModal } from '../components/qna';import logger from '../utils/logger';
 export default function QuestionDetailPage() {
   const { questionId } = useParams();
   const navigate = useNavigate();

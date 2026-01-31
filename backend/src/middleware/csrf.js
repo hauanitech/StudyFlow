@@ -47,14 +47,6 @@ export function csrfProtection(req, res, next) {
     const cookieToken = req.cookies[CSRF_COOKIE_NAME];
     const headerToken = req.headers[CSRF_HEADER_NAME];
 
-    console.log('[CSRF Debug]', {
-      method: req.method,
-      path: req.path,
-      cookieToken: cookieToken ? cookieToken.substring(0, 10) + '...' : 'MISSING',
-      headerToken: headerToken ? headerToken.substring(0, 10) + '...' : 'MISSING',
-      cookies: Object.keys(req.cookies),
-    });
-
     if (!cookieToken || !headerToken) {
       throw new AppError(403, 'CSRF token missing');
     }

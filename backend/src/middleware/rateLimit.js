@@ -146,6 +146,17 @@ export const postingRateLimit = rateLimit({
 });
 
 /**
+ * Rate limiter for reporting content
+ * 5 reports per hour per user to prevent spam
+ */
+export const reportRateLimit = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  message: 'You have submitted too many reports. Please try again later.',
+  keyGenerator: (req) => `report:${req.user?.id || req.ip}`,
+});
+
+/**
  * Rate limiter for voting
  * 30 votes per minute
  */

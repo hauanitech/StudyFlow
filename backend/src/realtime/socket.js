@@ -36,7 +36,7 @@ export function initializeSocket(server) {
   });
 
   io.on('connection', (socket) => {
-    console.log(`Socket connected: ${socket.id} (user: ${socket.userId})`);
+    logger.socket(`Socket connected: ${socket.id} (user: ${socket.userId})`);
 
     // Join user's personal room for notifications
     socket.join(`user:${socket.userId}`);
@@ -44,12 +44,12 @@ export function initializeSocket(server) {
     // Chat events
     socket.on('chat:join', (chatId) => {
       socket.join(`chat:${chatId}`);
-      console.log(`User ${socket.userId} joined chat ${chatId}`);
+      logger.socket(`User ${socket.userId} joined chat ${chatId}`);
     });
 
-    socket.on('chat:leave', (chatId) => {
+    socket.on('leave_chat', (chatId) => {
       socket.leave(`chat:${chatId}`);
-      console.log(`User ${socket.userId} left chat ${chatId}`);
+      logger.socket(`User ${socket.userId} left chat ${chatId}`);
     });
 
     socket.on('chat:message', async (data) => {
@@ -82,7 +82,7 @@ export function initializeSocket(server) {
 
     // Disconnect handling
     socket.on('disconnect', (reason) => {
-      console.log(`Socket disconnected: ${socket.id} (reason: ${reason})`);
+      logger.socket(`Socket disconnected: ${socket.id} (reason: ${reason})`);
     });
   });
 

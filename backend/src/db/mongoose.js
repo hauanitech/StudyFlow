@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import env from '../config/env.js';
+import logger from '../utils/logger.js';
 
 let isConnected = false;
 
 export async function connectDB() {
   if (isConnected) {
-    console.log('MongoDB already connected');
+    logger.debug('MongoDB already connected');
     return;
   }
 
@@ -20,17 +21,17 @@ export async function connectDB() {
     isConnected = true;
 
     mongoose.connection.on('error', (err) => {
-      console.error('MongoDB connection error:', err);
+      logger.error('MongoDB connection error:', err);
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.warn('MongoDB disconnected');
+      logger.warn('MongoDB disconnected');
       isConnected = false;
     });
 
     return mongoose.connection;
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
+    logger.error('Failed to connect to MongoDB:', error);
     throw error;
   }
 }
@@ -40,7 +41,7 @@ export async function disconnectDB() {
   
   await mongoose.disconnect();
   isConnected = false;
-  console.log('MongoDB disconnected');
+  logger.info('MongoDB disconnected');
 }
 
 export default connectDB;

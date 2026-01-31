@@ -1,4 +1,5 @@
 import env from '../config/env.js';
+import logger from '../utils/logger.js';
 
 export class AppError extends Error {
   constructor(statusCode, message, details = null) {
@@ -49,7 +50,7 @@ export function errorHandler(err, req, res, _next) {
 
   // Log error in development
   if (env.isDev) {
-    console.error('Error:', {
+    logger.error('Error:', {
       statusCode,
       message,
       stack: err.stack,
@@ -57,7 +58,7 @@ export function errorHandler(err, req, res, _next) {
     });
   } else if (statusCode >= 500) {
     // Log server errors in production
-    console.error('Server Error:', err);
+    logger.error('Server Error:', err);
   }
 
   // Send response

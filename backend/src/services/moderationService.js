@@ -37,6 +37,17 @@ export async function createReport(reporterId, data) {
     throw new Error('You have already reported this content');
   }
 
+  // Spam prevention: Check recent report count (last hour)
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  const recentReportCount = await Report.countDocuments({
+    reporter: reporterId,
+    createdAt: { $gte: oneHourAgo },
+  });
+  
+  if (recentReportCount >= 5) {
+    throw new Error('You have submitted too many reports. Please try again later.');
+  }
+
   const report = await Report.create({
     reporter: reporterId,
     targetType,

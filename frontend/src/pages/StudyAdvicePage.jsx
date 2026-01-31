@@ -170,7 +170,7 @@ export default function StudyAdvicePage() {
         setCategories(categoriesRes || []);
       } catch (err) {
         setError('Failed to load study advice');
-        console.error(err);
+        logger.error('Failed to load study advice:', err);
       } finally {
         setLoading(false);
       }

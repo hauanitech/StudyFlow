@@ -67,7 +67,7 @@ const navLinks = [
   { to: '/friends', label: 'Friends', auth: true, icon: Icons.friends },
   { to: '/chats', label: 'Chats', auth: true, icon: Icons.chats },
   { to: '/advice', label: 'Study Advice', icon: Icons.advice },
-  { to: '/qna', label: 'Q&A', auth: true, icon: Icons.qna },
+  { to: '/qa', label: 'Q&A', auth: true, icon: Icons.qna },
   { to: '/about', label: 'About', icon: Icons.about },
 ];
 

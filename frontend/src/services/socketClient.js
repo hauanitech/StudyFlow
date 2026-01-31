@@ -3,6 +3,7 @@
  */
 
 import { io } from 'socket.io-client';
+import logger from '../utils/logger.js';
 
 let socket = null;
 const listeners = new Map();
@@ -25,15 +26,15 @@ export function connect(token) {
   });
 
   socket.on('connect', () => {
-    console.log('Socket connected:', socket.id);
+    logger.debug('Socket connected:', socket.id);
   });
 
   socket.on('disconnect', (reason) => {
-    console.log('Socket disconnected:', reason);
+    logger.debug('Socket disconnected:', reason);
   });
 
   socket.on('connect_error', (error) => {
-    console.error('Socket connection error:', error.message);
+    logger.error('Socket connection error:', error.message);
   });
 
   return socket;
