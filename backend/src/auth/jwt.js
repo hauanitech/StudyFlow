@@ -76,8 +76,8 @@ export function generateTokens(user) {
 export function getCookieOptions(maxAge) {
   return {
     httpOnly: true,
-    secure: env.isProd,
-    sameSite: env.isProd ? 'strict' : 'lax',
+    secure: true, // Always use secure in production (required for SameSite=None)
+    sameSite: env.isProd ? 'none' : 'lax', // 'none' for cross-origin in production
     maxAge,
   };
 }
