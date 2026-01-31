@@ -23,7 +23,9 @@ const env = {
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES || '7d',
 
   // CORS
-  CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  CORS_ORIGIN: process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' 
+    ? (() => { throw new Error('CORS_ORIGIN is required in production'); })() 
+    : 'http://localhost:5173'),
 
   // CSRF
   CSRF_SECRET: process.env.CSRF_SECRET || 'dev-csrf-secret',

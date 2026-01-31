@@ -4,10 +4,14 @@ import env from './config/env.js';
 import connectDB from './db/mongoose.js';
 import { initializeSocket } from './realtime/socket.js';
 import logger from './utils/logger.js';
+import validateEnvironment from './config/validateEnv.js';
 
 const PORT = env.PORT || 3001;
 
 async function start() {
+  // Validate environment variables before starting
+  validateEnvironment();
+  
   try {
     // Connect to MongoDB
     await connectDB();

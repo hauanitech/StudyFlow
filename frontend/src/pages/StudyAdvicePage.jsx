@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import adviceApi from '../services/adviceApi';
+import logger from '../utils/logger';
 
 function AdviceCard({ article, onClick }) {
   const tags = article.tags || [];
