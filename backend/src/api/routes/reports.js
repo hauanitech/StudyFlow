@@ -68,9 +68,9 @@ router.post('/', requireAuth, reportRateLimit, validate(createReportSchema), asy
 
 // ============ Moderator Routes ============
 
-// Middleware to check moderator role
+// Middleware to check moderator/admin role
 const requireModerator = (req, res, next) => {
-  if (!req.user || req.user.role !== 'moderator') {
+  if (!req.user || !['moderator', 'admin'].includes(req.user.role)) {
     return res.status(403).json({ error: 'Moderator access required' });
   }
   next();

@@ -6,7 +6,11 @@ const allowedOrigins = env.CORS_ORIGIN.split(',').map(origin => origin.trim());
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
+    // Allow requests with no origin (mobile apps, curl, Postman, etc.)
+    // SECURITY NOTE: This allows non-browser clients to bypass CORS.
+    // For stricter security, remove this check and require all requests
+    // to have a valid origin header. However, this breaks mobile apps
+    // and server-to-server requests.
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.includes(origin)) {

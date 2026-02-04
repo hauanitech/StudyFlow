@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { verifyAccessToken } from '../auth/jwt.js';
 import env from '../config/env.js';
+import logger from '../utils/logger.js';
 
 let io = null;
 
@@ -47,7 +48,7 @@ export function initializeSocket(server) {
       logger.socket(`User ${socket.userId} joined chat ${chatId}`);
     });
 
-    socket.on('leave_chat', (chatId) => {
+    socket.on('chat:leave', (chatId) => {
       socket.leave(`chat:${chatId}`);
       logger.socket(`User ${socket.userId} left chat ${chatId}`);
     });

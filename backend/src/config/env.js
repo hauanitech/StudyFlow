@@ -17,8 +17,8 @@ const env = {
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/study-management',
 
   // JWT
-  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || 'dev-access-secret',
-  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'dev-refresh-secret',
+  JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET,
   JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES || '15m',
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES || '7d',
 
@@ -28,7 +28,7 @@ const env = {
     : 'http://localhost:5173'),
 
   // CSRF
-  CSRF_SECRET: process.env.CSRF_SECRET || 'dev-csrf-secret',
+  CSRF_SECRET: process.env.CSRF_SECRET,
 
   // Helpers
   isDev: process.env.NODE_ENV !== 'production',

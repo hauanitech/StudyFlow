@@ -7,8 +7,12 @@ import env from './env.js';
 
 const requiredVariables = [
   { name: 'MONGODB_URI', value: env.MONGODB_URI, description: 'MongoDB connection string' },
+];
+
+const secretVariables = [
   { name: 'JWT_ACCESS_SECRET', value: env.JWT_ACCESS_SECRET, description: 'JWT access token secret' },
   { name: 'JWT_REFRESH_SECRET', value: env.JWT_REFRESH_SECRET, description: 'JWT refresh token secret' },
+  { name: 'CSRF_SECRET', value: env.CSRF_SECRET, description: 'CSRF token secret' },
 ];
 
 const productionRequired = [
@@ -22,6 +26,17 @@ export function validateEnvironment() {
   for (const variable of requiredVariables) {
     if (!variable.value) {
       errors.push(`❌ ${variable.name} is required - ${variable.description}`);
+    }
+  }
+
+  // Check secret variables - required in production, warned in development
+  for (const variable of secretVariables) {
+    if (!variable.value) {
+      if (env.isProd) {
+        errors.push(`❌ ${variable.name} is required in production - ${variable.description}`);
+      } else {
+        console.warn(`⚠️  ${variable.name} not set - using insecure default for development only`);
+      }
     }
   }
 

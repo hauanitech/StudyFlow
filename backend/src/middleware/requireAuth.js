@@ -16,6 +16,7 @@ export async function requireAuth(req, res, next) {
     }
 
     let userId;
+    let userFromRefresh = null; // Cache user if fetched during refresh
 
     // Try to verify access token
     if (accessToken) {
@@ -37,20 +38,20 @@ export async function requireAuth(req, res, next) {
         userId = decoded.userId;
 
         // Issue new access token
-        const user = await User.findById(userId);
-        if (!user) {
+        userFromRefresh = await User.findById(userId);
+        if (!userFromRefresh) {
           throw new AppError(401, 'User not found');
         }
 
-        const tokens = generateTokens(user);
+        const tokens = generateTokens(userFromRefresh);
         res.cookie('accessToken', tokens.accessToken, getAccessCookieOptions());
       } catch (err) {
         throw new AppError(401, 'Invalid or expired session');
       }
     }
 
-    // Fetch user
-    const user = await User.findById(userId).select('-password');
+    // Fetch user (reuse from refresh if available)
+    const user = userFromRefresh || await User.findById(userId).select('-password');
     if (!user) {
       throw new AppError(401, 'User not found');
     }
