@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { usePomodoroAudio } from './usePomodoroAudio';
+import { DEFAULT_SOUND_SETTINGS } from '../config/audioConfig';
 
 const TIMER_STATES = {
   IDLE: 'idle',
@@ -21,9 +23,11 @@ const DEFAULT_SETTINGS = {
   autoStartBreaks: false,
   autoStartWork: false,
   soundEnabled: true,
+  // Audio settings
+  ...DEFAULT_SOUND_SETTINGS,
 };
 
-export function usePomodoroTimer(initialSettings = {}) {
+export function usePomodoroTimer(initialSettings = {}, isAuthenticated = false) {
   const settings = { ...DEFAULT_SETTINGS, ...initialSettings };
   
   const [state, setState] = useState(TIMER_STATES.IDLE);
@@ -33,7 +37,7 @@ export function usePomodoroTimer(initialSettings = {}) {
   const [currentSettings, setCurrentSettings] = useState(settings);
   
   const intervalRef = useRef(null);
-  const audioRef = useRef(null);
+  const { playSoundForPhase, previewSound, cleanup } = usePomodoroAudio();
 
   // Get phase duration in seconds
   const getPhaseDuration = useCallback((phaseType) => {
@@ -61,30 +65,17 @@ export function usePomodoroTimer(initialSettings = {}) {
     return PHASE_TYPES.WORK;
   }, [phase, completedSessions, currentSettings.sessionsBeforeLongBreak]);
 
-  // Play completion sound
+  // Play completion sound for the current phase
   const playSound = useCallback(() => {
     if (currentSettings.soundEnabled) {
-      // Create a simple beep using Web Audio API
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.5);
-      } catch {
-        // Audio not supported
-      }
+      playSoundForPhase(phase, currentSettings, isAuthenticated);
     }
-  }, [currentSettings.soundEnabled]);
+  }, [currentSettings, phase, playSoundForPhase, isAuthenticated]);
+
+  // Preview a sound (for settings UI)
+  const previewSoundById = useCallback((soundId) => {
+    previewSound(soundId, currentSettings.volume, isAuthenticated);
+  }, [currentSettings.volume, previewSound, isAuthenticated]);
 
   // Handle phase completion
   const handlePhaseComplete = useCallback(() => {
@@ -196,6 +187,13 @@ export function usePomodoroTimer(initialSettings = {}) {
   // Calculate progress percentage
   const progress = ((getPhaseDuration(phase) - timeRemaining) / getPhaseDuration(phase)) * 100;
 
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      cleanup();
+    };
+  }, [cleanup]);
+
   return {
     // State
     state,
@@ -222,6 +220,7 @@ export function usePomodoroTimer(initialSettings = {}) {
     resetAll,
     skip,
     updateSettings,
+    previewSound: previewSoundById,
     
     // Constants
     TIMER_STATES,

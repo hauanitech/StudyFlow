@@ -4,13 +4,15 @@ import usePomodoroTimer from '../hooks/usePomodoroTimer';
 import PomodoroTimer from '../components/pomodoro/PomodoroTimer';
 import PomodoroSettings from '../components/pomodoro/PomodoroSettings';
 import { Button } from '../components/ui';
+import { useAuthStore } from '../state/authStore';
 
 export default function PomodoroPage() {
   const [showSettings, setShowSettings] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
   
-  const timer = usePomodoroTimer();
-  const { isRunning, isPaused, resetAll, updateSettings, settings } = timer;
+  const timer = usePomodoroTimer({}, isAuthenticated);
+  const { isRunning, isPaused, resetAll, updateSettings, settings, previewSound } = timer;
 
   // Block navigation when timer is running
   const blocker = useBlocker(
@@ -66,6 +68,8 @@ export default function PomodoroPage() {
                 settings={settings}
                 onUpdate={updateSettings}
                 onClose={() => setShowSettings(false)}
+                onPreviewSound={previewSound}
+                isAuthenticated={isAuthenticated}
               />
             ) : (
               <PomodoroTimer {...timer} />
