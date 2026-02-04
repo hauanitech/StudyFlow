@@ -1,11 +1,19 @@
 import { useState } from 'react';
 import { Button, Input, Card } from '../ui';
+import AudioSelector from './AudioSelector';
+import { SOUND_PHASES, DEFAULT_SOUND_SETTINGS } from '../../config/audioConfig';
 
 const MIN_DURATION = 1;
 const MAX_WORK_DURATION = 120;
 const MAX_BREAK_DURATION = 60;
 
-export default function PomodoroSettings({ settings, onUpdate, onClose }) {
+export default function PomodoroSettings({ 
+  settings, 
+  onUpdate, 
+  onClose, 
+  onPreviewSound,
+  isAuthenticated = false 
+}) {
   const [formData, setFormData] = useState({
     workDuration: settings.workDuration,
     shortBreakDuration: settings.shortBreakDuration,
@@ -14,7 +22,14 @@ export default function PomodoroSettings({ settings, onUpdate, onClose }) {
     autoStartBreaks: settings.autoStartBreaks,
     autoStartWork: settings.autoStartWork,
     soundEnabled: settings.soundEnabled,
+    // Audio settings
+    workEndSound: settings.workEndSound || DEFAULT_SOUND_SETTINGS.workEndSound,
+    shortBreakEndSound: settings.shortBreakEndSound || DEFAULT_SOUND_SETTINGS.shortBreakEndSound,
+    longBreakEndSound: settings.longBreakEndSound || DEFAULT_SOUND_SETTINGS.longBreakEndSound,
+    volume: settings.volume ?? DEFAULT_SOUND_SETTINGS.volume,
   });
+  
+  const [expandedPhase, setExpandedPhase] = useState(null);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -41,8 +56,17 @@ export default function PomodoroSettings({ settings, onUpdate, onClose }) {
       autoStartBreaks: false,
       autoStartWork: false,
       soundEnabled: true,
+      ...DEFAULT_SOUND_SETTINGS,
     };
     setFormData(defaults);
+  };
+  
+  const handleSoundSelect = (phaseKey, soundId) => {
+    handleChange(phaseKey, soundId);
+  };
+
+  const togglePhaseExpanded = (phase) => {
+    setExpandedPhase(expandedPhase === phase ? null : phase);
   };
 
   return (
@@ -140,7 +164,7 @@ export default function PomodoroSettings({ settings, onUpdate, onClose }) {
         </div>
 
         {/* Sound */}
-        <div>
+        <div className="space-y-4">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -150,6 +174,70 @@ export default function PomodoroSettings({ settings, onUpdate, onClose }) {
             />
             <span className="text-sm text-gray-400">Play sound when timer completes</span>
           </label>
+          
+          {/* Volume slider */}
+          {formData.soundEnabled && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-gray-400">Volume</label>
+                <span className="text-xs text-gray-500">{Math.round(formData.volume * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.1"
+                value={formData.volume}
+                onChange={(e) => handleChange('volume', parseFloat(e.target.value))}
+                className="w-full h-2 bg-surface-600 rounded-lg appearance-none cursor-pointer accent-primary-500"
+              />
+            </div>
+          )}
+          
+          {/* Phase-specific sounds */}
+          {formData.soundEnabled && (
+            <div className="space-y-3 mt-4">
+              <h3 className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+                Notification Sounds
+              </h3>
+              
+              {Object.entries(SOUND_PHASES).map(([phaseId, phaseConfig]) => (
+                <div key={phaseId} className="border border-surface-600 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => togglePhaseExpanded(phaseId)}
+                    className="w-full flex items-center justify-between p-3 bg-surface-700/50 hover:bg-surface-700 transition-colors"
+                  >
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-gray-300">{phaseConfig.label}</p>
+                      <p className="text-xs text-gray-500">{phaseConfig.description}</p>
+                    </div>
+                    <svg 
+                      className={`w-4 h-4 text-gray-400 transition-transform ${expandedPhase === phaseId ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {expandedPhase === phaseId && (
+                    <div className="p-3 bg-surface-800/50">
+                      <AudioSelector
+                        selectedSoundId={formData[phaseConfig.key]}
+                        onSelect={(soundId) => handleSoundSelect(phaseConfig.key, soundId)}
+                        onPreview={onPreviewSound}
+                        isAuthenticated={isAuthenticated}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
