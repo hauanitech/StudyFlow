@@ -1,0 +1,72 @@
+{
+  "name": "StudyFlow",
+  "short_name": "StudyFlow",
+  "description": "Manage your study time with Pomodoro timer, journals, Q&A, and more",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/AppImages/android/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/AppImages/android/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/AppImages/android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/AppImages/android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/AppImages/android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/AppImages/android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/AppImages/ios/152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/AppImages/ios/180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Pomodoro Timer",
+      "short_name": "Pomodoro",
+      "description": "Start a focus session",
+      "url": "/pomodoro",
+      "icons": [{ "src": "/icons/AppImages/android/android-launchericon-96-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Journal",
+      "short_name": "Journal",
+      "description": "Write in your journal",
+      "url": "/journal",
+      "icons": [{ "src": "/icons/AppImages/android/android-launchericon-96-96.png", "sizes": "96x96" }]
+    }
+  ]
+}
