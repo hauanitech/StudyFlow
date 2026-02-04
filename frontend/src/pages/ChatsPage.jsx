@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { ChatSidebar, MessageList, MessageComposer, NewChatModal } from '../components/chats';
+import { ChatSidebar, MessageList, MessageComposer, NewChatModal, GroupMembersPanel } from '../components/chats';
 import chatsApi from '../services/chatsApi';
 import friendsApi from '../services/friendsApi';
 import socketClient from '../services/socketClient';
@@ -16,6 +16,8 @@ export default function ChatsPage() {
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showNewChatModal, setShowNewChatModal] = useState(false);
+  const [showMembersPanel, setShowMembersPanel] = useState(false);
+  const [chatDetails, setChatDetails] = useState(null);
   
   const typingTimeoutRef = useRef({});
 
@@ -118,14 +120,20 @@ export default function ChatsPage() {
   useEffect(() => {
     if (!selectedChatId) {
       setMessages([]);
+      setChatDetails(null);
+      setShowMembersPanel(false);
       return;
     }
 
     async function loadMessages() {
       try {
         setMessagesLoading(true);
-        const messagesData = await chatsApi.getMessages(selectedChatId);
+        const [messagesData, chatData] = await Promise.all([
+          chatsApi.getMessages(selectedChatId),
+          chatsApi.getChat(selectedChatId),
+        ]);
         setMessages(messagesData);
+        setChatDetails(chatData);
         
         // Join socket room
         socketClient.joinChat(selectedChatId);
@@ -267,11 +275,27 @@ export default function ChatsPage() {
                   </h2>
                   {selectedChat.type === 'group' && (
                     <p className="text-sm text-gray-400">
-                      {selectedChat.participants.length + 1} members
+                      {chatDetails?.members?.length || selectedChat.participants.length + 1} members
                     </p>
                   )}
                 </div>
               </div>
+              {/* Show members button for group chats */}
+              {selectedChat.type === 'group' && (
+                <button
+                  onClick={() => setShowMembersPanel(!showMembersPanel)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    showMembersPanel 
+                      ? 'bg-primary-900/30 text-primary-400' 
+                      : 'text-gray-400 hover:bg-surface-700 hover:text-white'
+                  }`}
+                  title={showMembersPanel ? 'Hide members' : 'Show members'}
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </button>
+              )}
             </div>
 
             {/* Messages */}
@@ -299,6 +323,16 @@ export default function ChatsPage() {
           </div>
         )}
       </div>
+
+      {/* Group members panel */}
+      {selectedChat?.type === 'group' && chatDetails?.members && (
+        <GroupMembersPanel
+          members={chatDetails.members}
+          isOpen={showMembersPanel}
+          onClose={() => setShowMembersPanel(false)}
+          currentUserId={user?.id}
+        />
+      )}
 
       {/* Error toast */}
       {error && (

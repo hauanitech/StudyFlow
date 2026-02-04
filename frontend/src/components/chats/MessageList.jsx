@@ -93,22 +93,32 @@ function MessageBubble({ message, isOwn, showAvatar }) {
     return (
       <div className="flex justify-center">
         <p className="text-xs text-gray-400 italic">
-          {message.sender?.username || 'Someone'} {message.content}
+          {message.sender?.displayName || message.sender?.username || 'Someone'} {message.content}
         </p>
       </div>
     );
   }
 
+  const senderName = message.sender?.displayName || message.sender?.username || '?';
+
   return (
     <div className={`flex items-end gap-2 ${isOwn ? 'flex-row-reverse' : ''}`}>
-      {/* Avatar placeholder */}
+      {/* Avatar */}
       <div className={`w-8 h-8 flex-shrink-0 ${showAvatar ? '' : 'invisible'}`}>
         {showAvatar && !isOwn && (
-          <div className="w-8 h-8 rounded-full bg-primary-900/30 flex items-center justify-center">
-            <span className="text-sm font-semibold text-primary-400">
-              {(message.sender?.username || '?').charAt(0).toUpperCase()}
-            </span>
-          </div>
+          message.sender?.avatarUrl ? (
+            <img
+              src={message.sender.avatarUrl}
+              alt={senderName}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-primary-900/30 flex items-center justify-center">
+              <span className="text-sm font-semibold text-primary-400">
+                {senderName.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          )
         )}
       </div>
 
@@ -123,7 +133,7 @@ function MessageBubble({ message, isOwn, showAvatar }) {
       >
         {!isOwn && showAvatar && (
           <p className="text-xs font-medium text-primary-400 mb-1">
-            {message.sender?.username}
+            {senderName}
           </p>
         )}
         <p className="whitespace-pre-wrap break-words">{message.content}</p>
@@ -178,6 +188,8 @@ MessageList.propTypes = {
     sender: PropTypes.shape({
       id: PropTypes.string,
       username: PropTypes.string,
+      displayName: PropTypes.string,
+      avatarUrl: PropTypes.string,
     }),
     content: PropTypes.string.isRequired,
     type: PropTypes.string,

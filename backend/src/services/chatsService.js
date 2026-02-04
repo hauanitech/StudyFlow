@@ -166,7 +166,32 @@ export async function getChat(chatId, userId) {
     throw new AppError(403, 'You are not a member of this chat');
   }
 
-  return chat;
+  // Enrich with member details
+  const participants = await User.find({ _id: { $in: chat.participants } })
+    .select('username')
+    .lean();
+
+  const profiles = await Profile.find({ userId: { $in: chat.participants } })
+    .select('userId displayName avatarUrl')
+    .lean();
+
+  const profileMap = new Map(profiles.map(p => [p.userId.toString(), p]));
+
+  const enrichedMembers = participants.map(p => ({
+    id: p._id,
+    username: p.username,
+    displayName: profileMap.get(p._id.toString())?.displayName,
+    avatarUrl: profileMap.get(p._id.toString())?.avatarUrl,
+  }));
+
+  return {
+    id: chat._id,
+    type: chat.type,
+    name: chat.name,
+    creatorId: chat.creatorId,
+    members: enrichedMembers,
+    createdAt: chat.createdAt,
+  };
 }
 
 /**
@@ -187,19 +212,33 @@ export async function getChatMessages(chatId, userId, options = {}) {
     await ChatMembership.updateLastRead(chatId, userId, lastMessage._id);
   }
 
-  return messages.map(m => ({
-    id: m._id,
-    chatId: m.chatId,
-    sender: m.senderDeleted ? { username: '[Deleted User]' } : {
-      id: m.senderId?._id,
-      username: m.senderId?.username,
-    },
-    content: m.content,
-    type: m.type,
-    systemAction: m.systemAction,
-    isEdited: m.isEdited,
-    createdAt: m.createdAt,
-  }));
+  // Get sender IDs and fetch their profiles for avatars
+  const senderIds = [...new Set(messages.map(m => m.senderId?._id?.toString()).filter(Boolean))];
+  const profiles = await Profile.find({ userId: { $in: senderIds } })
+    .select('userId displayName avatarUrl')
+    .lean();
+  const profileMap = new Map(profiles.map(p => [p.userId.toString(), p]));
+
+  return messages.map(m => {
+    const senderId = m.senderId?._id?.toString();
+    const senderProfile = senderId ? profileMap.get(senderId) : null;
+    
+    return {
+      id: m._id,
+      chatId: m.chatId,
+      sender: m.senderDeleted ? { username: '[Deleted User]' } : {
+        id: m.senderId?._id,
+        username: m.senderId?.username,
+        displayName: senderProfile?.displayName,
+        avatarUrl: senderProfile?.avatarUrl,
+      },
+      content: m.content,
+      type: m.type,
+      systemAction: m.systemAction,
+      isEdited: m.isEdited,
+      createdAt: m.createdAt,
+    };
+  });
 }
 
 /**
